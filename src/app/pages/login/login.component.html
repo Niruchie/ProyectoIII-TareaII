@@ -1,0 +1,29 @@
+<section name="login" class="container p-5">
+
+	<form #frm="ngForm" (ngSubmit)="onLogin($event)">
+
+		<div class="form-group mb-2">
+			<label for="" class="py-2">Correo electrónico</label>
+			<input ngModel #email="ngModel" name="email" type="email" class="form-control"
+				placeholder="Ingrese su correo electrónico" aria-describedby="emailHelp">
+			<small class="form-text text-muted">
+				Su correo electrónico se utilizará para iniciar sesión.
+			</small>
+		</div>
+
+		<div class="form-group mb-2">
+			<label for="" class="py-2">Contraseña</label>
+			<input ngModel #password="ngModel" name="password" type="password" class="form-control"
+				placeholder="Ingrese su contraseña" aria-describedby="passwordHelp">
+			<small class="form-text text-muted">
+				No comparta su contraseña con nadie más.
+			</small>
+		</div>
+
+		<div class="mb-2">
+			<button type="submit" class="btn btn-primary">Iniciar sesión</button>
+		</div>
+
+	</form>
+
+</section>
