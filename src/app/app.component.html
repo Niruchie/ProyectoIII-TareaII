@@ -11,6 +11,21 @@
 		@if (isLoggedIn) {
 			<ul ngbNav class="navbar-nav ms-auto">
 				<li ngbNavItem>
+					<a ngbNavLink [routerLink]="['/dashboard']">
+						Dashboard
+					</a>
+				</li>
+				<li ngbNavItem>
+					<a ngbNavLink [routerLink]="['/categories']">
+						Categorías
+					</a>
+				</li>
+				<li ngbNavItem>
+					<a ngbNavLink [routerLink]="['/products']">
+						Productos
+					</a>
+				</li>
+				<li ngbNavItem>
 					<a ngbNavLink [routerLink]="['/logout']" (click)="doLogout()">
 						Cerrar sesión
 					</a>
@@ -20,12 +35,17 @@
 		@else {
 			<ul ngbNav class="navbar-nav ms-auto">
 				<li ngbNavItem>
-					<a ngbNavLink [routerLink]="['/login']" [routerLinkActive]="['active']">
+					<a ngbNavLink [routerLink]="['/']">
+						Inicio
+					</a>
+				</li>
+				<li ngbNavItem>
+					<a ngbNavLink [routerLink]="['/login']">
 						Iniciar sesión
 					</a>
 				</li>
 				<li ngbNavItem>
-					<a ngbNavLink [routerLink]="['/register']" [routerLinkActive]="['active']">
+					<a ngbNavLink [routerLink]="['/register']">
 						Registrarse
 					</a>
 				</li>

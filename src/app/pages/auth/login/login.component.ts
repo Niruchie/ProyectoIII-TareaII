@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AuthenticationService } from '../../service/authentication.service';
+import { AuthenticationService } from '../../../service/authentication.service';
 
 @Component({
   imports: [LoginComponent, CommonModule, FormsModule],
