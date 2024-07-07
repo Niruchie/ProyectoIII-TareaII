@@ -7,5 +7,5 @@ import IProduct from '../../types/IProduct';
   providedIn: 'root'
 })
 export class ProductService extends CrudBaseService<IProduct> {
-  protected override service = 'producto';
+  protected override service = '/producto';
 }

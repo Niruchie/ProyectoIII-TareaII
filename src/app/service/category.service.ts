@@ -7,5 +7,5 @@ import ICategory from '../../types/ICategory';
   providedIn: 'root'
 })
 export class CategoryService extends CrudBaseService<ICategory> {
-  protected override service = 'categoria';
+  protected override service = '/categoria';
 }
