@@ -11,18 +11,31 @@
 		</div>
 		<div class="offcanvas-body">
 			<form #formCategoria="ngForm">
+
 				<div class="mb-3">
 					<label for="nombre" class="form-label">Nombre</label>
 					<input ngModel #nombre="ngModel" name="nombre" type="text" class="form-control" id="nombre"
 						aria-describedby="nombreHelp" required>
-					<div id="nombreHelp" class="form-text">Nombre de la categoría.</div>
+					<span *ngIf="!nombre.touched" id="nombreHelp" class="form-text">
+						Nombre de la categoría.
+					</span>
+					<span *ngIf="nombre.touched" id="nombreHelp" class="form-text text-danger">
+						El nombre es obligatorio.
+					</span>
 				</div>
+
 				<div class="mb-3">
 					<label for="descripcion" class="form-label">Descripción</label>
 					<textarea ngModel #descripcion="ngModel" name="descripcion" class="form-control" id="descripcion"
 						aria-describedby="descripcionHelp" required></textarea>
-					<div id="descripcionHelp" class="form-text">Descripción de la categoría.</div>
+					<span *ngIf="!descripcion.touched" id="descripcionHelp" class="form-text">
+						Descripción de la categoría.
+					</span>
+					<span *ngIf="descripcion.touched" id="descripcionHelp" class="form-text text-danger">
+						La descripción es obligatoria.
+					</span>
 				</div>
+				
 				<button type="button" class="btn btn-primary" (click)="save()">Guardar</button>
 			</form>
 		</div>

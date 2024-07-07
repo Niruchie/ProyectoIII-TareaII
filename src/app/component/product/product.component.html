@@ -1,0 +1,52 @@
+<div class="card w-100 h-100">
+	<div class="card-body d-flex flex-column justify-content-between">
+		<div class="card-title">
+			<span class="h5 me-2">
+				{{product.nombre}}
+			</span>
+
+			<span class="bg-dark text-white float-end rounded ms-2 px-2">
+				{{product.id}}
+			</span>
+
+		</div>
+
+		<section class="card-text p-2">
+			<p>
+				{{product.descripcion}}
+			</p>
+			<p>
+				<span class="fw-bold">
+					Precio: {{product.precio}}
+				</span>
+			</p>
+
+			<p>
+				<span *ngIf="product.cantidadEnStock <= 0" class="text-danger">
+					🔴 Agotado
+				</span>
+				<span *ngIf="product.cantidadEnStock >  0" class="text-success">
+					🟢 Disponibles ({{product.cantidadEnStock}})
+				</span>
+			</p>
+
+			<p>
+				<span class="badge bg-primary text-white float-end rounded me-2 px-2">
+					{{product.categoria.nombre}}
+				</span>
+			</p>
+		</section>
+
+
+		<div class="card-footer d-flex justify-content-end">
+			<button class="btn btn-primary ms-2" (click)="null">
+				<i class="bi bi-pencil"></i>
+				Editar
+			</button>
+			<button class="btn btn-danger ms-2" (click)="null">
+				<i class="bi bi-trash"></i>
+				Eliminar
+			</button>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,82 @@
+<dialog [open]="open" class="editor-dialog">
+	<aside class="offcanvas offcanvas-start" [class.show]="open" data-bs-scroll="true" data-bs-backdrop="true">
+		<div class="offcanvas-header">
+			@if (product.id) {
+			<h5 class="offcanvas-title" id="editCategoryOffcanvasLabel">Editar Producto</h5>
+			}
+			@else {
+			<h5 class="offcanvas-title" id="editCategoryOffcanvasLabel">Nueva Producto</h5>
+			}
+			<button type="button" class="btn-close text-reset" aria-label="Close" (click)="closeEditor()"></button>
+		</div>
+		<div class="offcanvas-body">
+			<form #formCategoria="ngForm">
+
+				<div class="mb-3">
+					<label for="nombre" class="form-label">Nombre</label>
+					<input ngModel #nombre="ngModel" name="nombre" type="text" class="form-control" id="nombre"
+						aria-describedby="nombreHelp" required>
+					<span *ngIf="!nombre.touched" id="nombreHelp" class="form-text">
+						Nombre del producto.
+					</span>
+					<span *ngIf="nombre.touched" id="nombreHelp" class="form-text text-danger">
+						El nombre es obligatorio.
+					</span>
+				</div>
+
+				<div class="mb-3">
+					<label for="descripcion" class="form-label">Descripción</label>
+					<textarea ngModel #descripcion="ngModel" name="descripcion" class="form-control" id="descripcion"
+						aria-describedby="descripcionHelp" required></textarea>
+					<span *ngIf="!descripcion.touched" id="descripcionHelp" class="form-text">
+						Descripción del producto.
+					</span>
+					<span *ngIf="descripcion.touched" id="descripcionHelp" class="form-text text-danger">
+						La descripción es obligatoria.
+					</span>
+				</div>
+
+				<div class="mb-3">
+					<label for="precio" class="form-label">Precio</label>
+					<input ngModel #precio="ngModel" name="precio" type="number" class="form-control" id="precio"
+						aria-describedby="precioHelp" required>
+					<span *ngIf="!precio.touched" id="precioHelp" class="form-text">
+						Precio del producto.
+					</span>
+					<span *ngIf="precio.touched" id="precioHelp" class="form-text text-danger">
+						El precio es obligatorio.
+					</span>
+				</div>
+
+				<div class="mb-3">
+					<label for="cantidadEnStock" class="form-label">Cantidad en Stock</label>
+					<input ngModel #cantidadEnStock="ngModel" name="cantidadEnStock" type="number" class="form-control"
+						id="cantidadEnStock" aria-describedby="cantidadEnStockHelp" required>
+					<span *ngIf="!cantidadEnStock.touched" id="cantidadEnStockHelp" class="form-text">
+						Cantidad en stock del producto.
+					</span>
+					<span *ngIf="cantidadEnStock.touched" id="cantidadEnStockHelp" class="form-text text-danger">
+						La cantidad en stock es obligatoria.
+					</span>
+				</div>
+
+				<div class="mb-3">
+					<label for="categoria" class="form-label">Categoría</label>
+					<select ngModel #categoria="ngModel" name="categoria" class="form-select" id="categoria"
+						aria-describedby="categoriaHelp" required>
+						<option *ngFor="let categoria of categories" [value]="categoria.id">{{categoria.nombre}}
+						</option>
+					</select>
+					<span *ngIf="!categoria.touched" id="categoriaHelp" class="form-text">
+						Categoría del producto.
+					</span>
+					<span *ngIf="categoria.touched" id="categoriaHelp" class="form-text text-danger">
+						La categoría es obligatoria.
+					</span>
+				</div>
+
+				<button type="button" class="btn btn-primary" (click)="save()">Guardar</button>
+			</form>
+		</div>
+	</aside>
+</dialog>

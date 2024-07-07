@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { Subject } from 'rxjs/internal/Subject';
 
+import { EditorComponent } from '../../component/category/editor/editor.component';
 import { CategoryComponent } from '../../component/category/category.component';
 import { CategoryService } from '../../service/category.service';
 import ICategory from '../../../types/ICategory';
-import { EditorComponent } from '../../component/category/editor/editor.component';
 
 @Component({
   imports: [CategoryComponent, EditorComponent],
