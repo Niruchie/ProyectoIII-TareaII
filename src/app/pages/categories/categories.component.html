@@ -1,1 +1,30 @@
-<p>categories works!</p>
+<article class="container-fluid px-5 py-2">
+	<section name="title" class="py-2">
+		<span class="h1">
+			Categorías
+		</span>
+	</section>
+
+	<section name="actions" class="d-flex justify-content-end">
+		<button class="btn btn-info" (click)="clickAddCategory()">
+			<i class="bi bi-plus-lg"></i>
+			Agregar
+		</button>
+	</section>
+
+	<section name="categories">
+		<div class="container-fluid ">
+			<div class="row mt-3 d-flex align-items-stretch">
+				@for (category of categories; track $index) {
+				<div class="col-md-6 col-xl-3 mb-3">
+					<app-category [category]="category" />
+				</div>
+				}
+			</div>
+		</div>
+	</section>
+</article>
+
+@if (offcanvas) {
+<app-category-editor [events]="offcanvas" />
+}

@@ -1,0 +1,30 @@
+<dialog [open]="open" class="editor-dialog">
+	<aside class="offcanvas offcanvas-start" [class.show]="open" data-bs-scroll="true" data-bs-backdrop="true">
+		<div class="offcanvas-header">
+			@if (category.id) {
+			<h5 class="offcanvas-title" id="editCategoryOffcanvasLabel">Editar Categoría</h5>
+			}
+			@else {
+			<h5 class="offcanvas-title" id="editCategoryOffcanvasLabel">Nueva Categoría</h5>
+			}
+			<button type="button" class="btn-close text-reset" aria-label="Close" (click)="closeEditor()"></button>
+		</div>
+		<div class="offcanvas-body">
+			<form #formCategoria="ngForm">
+				<div class="mb-3">
+					<label for="nombre" class="form-label">Nombre</label>
+					<input ngModel #nombre="ngModel" name="nombre" type="text" class="form-control" id="nombre"
+						aria-describedby="nombreHelp" required>
+					<div id="nombreHelp" class="form-text">Nombre de la categoría.</div>
+				</div>
+				<div class="mb-3">
+					<label for="descripcion" class="form-label">Descripción</label>
+					<textarea ngModel #descripcion="ngModel" name="descripcion" class="form-control" id="descripcion"
+						aria-describedby="descripcionHelp" required></textarea>
+					<div id="descripcionHelp" class="form-text">Descripción de la categoría.</div>
+				</div>
+				<button type="button" class="btn btn-primary" (click)="save()">Guardar</button>
+			</form>
+		</div>
+	</aside>
+</dialog>

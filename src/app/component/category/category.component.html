@@ -1,0 +1,28 @@
+<div class="card w-100 h-100">
+	<div class="card-body d-flex flex-column justify-content-between">
+		<div class="card-title">
+			<span class="h5 me-2">
+				{{category.nombre}}
+			</span>
+			<span class="bg-dark text-white float-end rounded px-2">
+				{{category.id}}
+			</span>
+		</div>
+
+		<p class="card-text">
+			{{category.descripcion}}
+		</p>
+
+		<div class="card-footer  d-flex justify-content-end">
+			<button class="btn btn-primary ms-2" (click)="null">
+				<i class="bi bi-pencil"></i>
+				Editar
+			</button>
+			<button class="btn btn-danger ms-2" (click)="null">
+				<i class="bi bi-trash"></i>
+				Eliminar
+			</button>
+		</div>
+	</div>
+</div>
+
