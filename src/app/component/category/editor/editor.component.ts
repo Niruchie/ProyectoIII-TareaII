@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import ICategory from '../../../../types/ICategory';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgModel } from '@angular/forms';
@@ -12,43 +12,40 @@ import { Observable } from 'rxjs';
   selector: 'app-category-editor',
   standalone: true,
 })
-export class EditorComponent {
-  @Input()
-  events!: Observable<{
-    category: ICategory;
-    onCreated: (category: ICategory) => undefined;
-    onUpdated: (category: ICategory) => undefined;
-  }>;
-
+export class EditorComponent implements OnInit {
   @ViewChild('nombre')
-  nombre!: NgModel;
+  protected nombre!: NgModel;
 
   @ViewChild('descripcion')
-  descripcion!: NgModel;
+  protected descripcion!: NgModel;
 
-  constructor(private service: CategoryService) {
-    
-  }
+  @Input({ required: true })
+  public events!: Observable<{
+    delete: boolean;
+    category: ICategory;
+    onCreated: (category: ICategory) => undefined;
+    onDeleted: (category: ICategory) => undefined;
+  }>;
 
-  ngOnInit() {
-    this.events.subscribe({
-      next: (event) => {
-        this.addUpdatedCategory = event.onUpdated;
-        this.addCreatedCategory = event.onCreated;
-        this.category = event.category;
-        this.open = true;
-      },
-    });
-  }
-
-  protected open = false;
-  protected category: ICategory = {} as ICategory;
+  private service: CategoryService = inject(CategoryService);
   protected addCreatedCategory = (category: ICategory) => void 0;
-  protected addUpdatedCategory = (category: ICategory) => void 0;
+  protected addDeletedCategory = (category: ICategory) => void 0;
+  protected category: ICategory = {} as ICategory;
+  protected open = false;
 
-  protected cleanEditor() {
-    this.nombre.control.reset();
-    this.descripcion.control.reset();
+  private cleanErrors() {
+    this.nombre.control.setErrors(null);
+    this.descripcion.control.setErrors(null);
+  }
+
+  private cleanEditor() {
+    if (!this.category.id) {
+      this.category = {} as ICategory;
+      this.descripcion.control.reset();
+      this.nombre.control.reset();
+    }
+
+    this.cleanErrors();
   }
 
   protected closeEditor() {
@@ -57,14 +54,16 @@ export class EditorComponent {
     return this.open;
   }
 
-  async save() {
+  protected async save() {
+    this.cleanErrors();
+
     if (!this.nombre.valid || this.nombre.value === '') {
-      this.nombre.control.markAsTouched();
+      this.nombre.control.setErrors({ required: true });
       return;
     }
 
     if (!this.descripcion.valid || this.descripcion.value === '') {
-      this.descripcion.control.markAsTouched();
+      this.descripcion.control.setErrors({ required: true });
       return;
     }
 
@@ -76,7 +75,6 @@ export class EditorComponent {
         .update(this.category)
         .subscribe({
           next: () => {
-            this.addUpdatedCategory(this.category);
             this.closeEditor();
             this.cleanEditor();
           },
@@ -95,5 +93,36 @@ export class EditorComponent {
           error: (error) => console.error(error),
         });
     }
+  }
+
+  protected async delete() {
+    if (!this.category.id) {
+      return;
+    }
+
+    this.service
+      .delete(this.category)
+      .subscribe({
+        next: () => {
+          this.addDeletedCategory(this.category);
+          this.closeEditor();
+          this.cleanEditor();
+        },
+        error: (error) => console.error(error),
+      });
+  }
+
+  public ngOnInit() {
+    this.events.subscribe({
+      next: (event) => {
+        this.addCreatedCategory = event.onCreated;
+        this.addDeletedCategory = event.onDeleted;
+        this.category = event.category;
+
+        this.descripcion.control.setValue(this.category.descripcion);
+        this.nombre.control.setValue(this.category.nombre);
+        this.open = true;
+      },
+    });
   }
 }
