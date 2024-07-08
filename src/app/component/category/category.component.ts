@@ -18,7 +18,6 @@ export class CategoryComponent {
   public category!: ICategory;
 
   protected offcanvas: Subject<{
-    delete: boolean;
     category: ICategory;
     onCreated: (category: ICategory) => undefined;
     onDeleted: (category: ICategory) => undefined;
@@ -26,7 +25,6 @@ export class CategoryComponent {
 
   protected clickUpdateCategory() {
     this.offcanvas.next({
-      delete: false,
       category: this.category,
       onDeleted: this.onDeleted,
       onCreated: (category: ICategory) => void 0,

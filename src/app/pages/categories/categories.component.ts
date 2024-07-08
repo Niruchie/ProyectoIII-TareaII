@@ -17,7 +17,6 @@ export class CategoriesComponent implements OnInit {
   private service: CategoryService = inject(CategoryService);
   protected categories: Array<ICategory> = [];
   protected offcanvas = new Subject<{
-    delete: boolean;
     category: ICategory;
     onCreated: (category: ICategory) => undefined;
     onDeleted: (category: ICategory) => undefined;
@@ -36,7 +35,6 @@ export class CategoriesComponent implements OnInit {
 
   protected clickAddCategory() {
     this.offcanvas.next({
-      delete: false,
       category: {} as ICategory,
       onCreated: this.addCategory.bind(this),
       onDeleted: (category: ICategory) => void 0,

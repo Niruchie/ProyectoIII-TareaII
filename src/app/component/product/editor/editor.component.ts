@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, inject, Input, ViewChild } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
@@ -15,14 +15,6 @@ import IProduct from '../../../../types/IProduct';
   standalone: true,
 })
 export class EditorComponent {
-  @Input()
-  events!: Observable<{
-    product: IProduct;
-    categories: Array<ICategory>;
-    onCreated: (product: IProduct) => undefined;
-    onUpdated: (product: IProduct) => undefined;
-  }>;
-
   @ViewChild('nombre')
   nombre!: NgModel;
 
@@ -38,37 +30,41 @@ export class EditorComponent {
   @ViewChild('categoria')
   categoria!: NgModel;
 
-  constructor(private service: ProductService) {
+  @Input()
+  events!: Observable<{
+    product: IProduct;
+    categories: Array<ICategory>;
+    onCreated: (product: IProduct) => undefined;
+    onDeleted: (product: IProduct) => undefined;
+  }>;
 
-  }
 
-  ngOnInit() {
-    this.events
-      .subscribe({
-        next: (event) => {
-          this.addUpdatedProduct = event.onUpdated;
-          this.addCreatedProduct = event.onCreated;
-          this.categories = event.categories;
-          this.product = event.product;
-          this.open = true;
-        },
-      });
-  }
-
-  protected open = false;
-  protected product = {} as IProduct;
-  protected categories: Array<ICategory> = [];
-  protected addUpdatedProduct = (product: IProduct) => void 0;
+  private service = inject(ProductService);
   protected addCreatedProduct = (product: IProduct) => void 0;
+  protected addDeletedProduct = (product: IProduct) => void 0;
+  protected categories: Array<ICategory> = [];
+  protected product = {} as IProduct;
+  protected open = false;
 
-  protected cleanEditor() {
-    this.nombre.control.reset();
-    this.precio.control.reset();
-    this.categoria.control.reset();
-    this.descripcion.control.reset();
-    this.cantidadEnStock.control.reset();
-    this.product = {} as IProduct;
-    return this.product;
+  private cleanErrors() {
+    this.cantidadEnStock.control.setErrors(null);
+    this.descripcion.control.setErrors(null);
+    this.categoria.control.setErrors(null);
+    this.nombre.control.setErrors(null);
+    this.precio.control.setErrors(null);
+  }
+
+  private cleanEditor() {
+    if (!this.product.id) {
+      this.product = {} as IProduct;
+      this.cantidadEnStock.control.reset();
+      this.descripcion.control.reset();
+      this.categoria.control.reset();
+      this.precio.control.reset();
+      this.nombre.control.reset();
+    }
+
+    this.cleanErrors();
   }
 
   protected closeEditor() {
@@ -78,42 +74,44 @@ export class EditorComponent {
   }
 
   protected async save() {
+    const precio = Number(this.precio.value);
     const categoriaId = Number(this.categoria.value);
+    const cantidadEnStock = Number(this.cantidadEnStock.value);
 
     if (!this.nombre.valid || this.nombre.value === '') {
-      this.nombre.control.markAsTouched();
+      this.nombre.control.setErrors({ required: true });
       return;
     }
 
     if (!this.descripcion.valid || this.descripcion.value === '') {
-      this.descripcion.control.markAsTouched();
+      this.descripcion.control.setErrors({ required: true });
       return;
     }
 
-    if (!this.precio.valid || this.precio.value === '') {
-      this.precio.control.markAsTouched();
+    if (!this.precio.valid || isNaN(precio) || precio < 0) {
+      this.precio.control.setErrors({ required: true });
       return;
     }
 
-    if (!this.cantidadEnStock.valid || this.cantidadEnStock.value === '') {
-      this.cantidadEnStock.control.markAsTouched();
+    if (!this.cantidadEnStock.valid || isNaN(cantidadEnStock) || cantidadEnStock < 0) {
+      this.cantidadEnStock.control.setErrors({ required: true });
       return;
     }
 
     if (isNaN(categoriaId) || !this.categories.map((category) => category.id).includes(categoriaId)) {
-      this.categoria.control.markAsTouched();
+      this.categoria.control.setErrors({ required: true });
       return;
     }
 
+    this.product.precio = precio;
     this.product.nombre = this.nombre.value;
+    this.product.cantidadEnStock = cantidadEnStock;
     this.product.descripcion = this.descripcion.value;
-    this.product.precio = this.precio.value;
-    this.product.cantidadEnStock = this.cantidadEnStock.value;
     this.product.categoria = this.categories
       .find((category) => category.id === categoriaId)!;
 
-    if (!this.product.categoria){
-      this.categoria.control.markAsTouched();
+    if (!this.product.categoria) {
+      this.categoria.control.setErrors({ required: true });
       return;
     }
 
@@ -122,7 +120,6 @@ export class EditorComponent {
         .update(this.product)
         .subscribe({
           next: () => {
-            this.addUpdatedProduct(this.product);
             this.closeEditor();
             this.cleanEditor();
           },
@@ -141,5 +138,44 @@ export class EditorComponent {
           error: (error) => console.error(error),
         });
     }
+  }
+
+  protected async delete() {
+    if (!this.product.id) {
+      return;
+    }
+
+    this.service
+      .delete(this.product)
+      .subscribe({
+        next: () => {
+          this.addDeletedProduct(this.product);
+          this.closeEditor();
+          this.cleanEditor();
+        },
+        error: (error) => console.error(error),
+      });
+  }
+
+  public ngOnInit() {
+    this.events
+      .subscribe({
+        next: (event) => {
+          this.addDeletedProduct = event.onDeleted;
+          this.addCreatedProduct = event.onCreated;
+          this.categories = event.categories;
+          this.product = event.product;
+
+          if (this.product.categoria) {
+            this.categoria.control.setValue(this.product.categoria.id);
+          }
+
+          this.cantidadEnStock.control.setValue(this.product.cantidadEnStock);
+          this.descripcion.control.setValue(this.product.descripcion);
+          this.nombre.control.setValue(this.product.nombre);
+          this.precio.control.setValue(this.product.precio);
+          this.open = true;
+        },
+      });
   }
 }

@@ -39,14 +39,12 @@
 
 
 		<div class="card-footer d-flex justify-content-end">
-			<button class="btn btn-primary ms-2" (click)="null">
+			<button class="btn btn-primary ms-2" (click)="clickUpdateProduct()">
 				<i class="bi bi-pencil"></i>
-				Editar
-			</button>
-			<button class="btn btn-danger ms-2" (click)="null">
-				<i class="bi bi-trash"></i>
-				Eliminar
+				Modificar elemento
 			</button>
 		</div>
 	</div>
 </div>
+
+<app-product-editor [events]="offcanvas" />

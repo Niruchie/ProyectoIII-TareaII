@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnChanges, OnInit } from '@angular/core';
 import { Subject } from 'rxjs/internal/Subject';
 
 // * Categories
@@ -18,27 +18,26 @@ import IProduct from '../../../types/IProduct';
   selector: 'app-products',
   standalone: true,
 })
-export class ProductsComponent {
+export class ProductsComponent implements OnInit {
+  private catservice = inject(CategoryService);
+  private service = inject(ProductService);
   protected categories: Array<ICategory> = [];
   protected products: Array<IProduct> = [];
   protected offcanvas = new Subject<{
     product: IProduct;
     categories: Array<ICategory>;
     onCreated: (product: IProduct) => undefined;
-    onUpdated: (product: IProduct) => undefined;
+    onDeleted: (product: IProduct) => undefined;
   }>();
-
-  constructor(private catservice: CategoryService, private service: ProductService) { }
-
-  ngOnInit() {
-    const product = {} as IProduct;
-    this.service
-      .obtain(product)
-      .subscribe((data) => this.products = data);
-  }
 
   private addProduct(product: IProduct) {
     this.products.push(product);
+    return void 0;
+  }
+
+  protected removeProduct(product: IProduct) {
+    this.products = this.products
+      .filter((p) => p.id !== product.id);
     return void 0;
   }
 
@@ -52,8 +51,15 @@ export class ProductsComponent {
           product: {} as IProduct,
           categories: this.categories,
           onCreated: this.addProduct.bind(this),
-          onUpdated: (product: IProduct) => void 0,
+          onDeleted: (product: IProduct) => void 0,
         });
       });
+  }
+
+  public ngOnInit() {
+    const product = {} as IProduct;
+    this.service
+      .obtain(product)
+      .subscribe((data) => this.products = data);
   }
 }

@@ -1,8 +1,9 @@
 import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
-import ICategory from '../../../../types/ICategory';
-import { CommonModule } from '@angular/common';
 import { FormsModule, NgModel } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
 import { CategoryService } from '../../../service/category.service';
+import ICategory from '../../../../types/ICategory';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -21,7 +22,6 @@ export class EditorComponent implements OnInit {
 
   @Input({ required: true })
   public events!: Observable<{
-    delete: boolean;
     category: ICategory;
     onCreated: (category: ICategory) => undefined;
     onDeleted: (category: ICategory) => undefined;
@@ -55,8 +55,6 @@ export class EditorComponent implements OnInit {
   }
 
   protected async save() {
-    this.cleanErrors();
-
     if (!this.nombre.valid || this.nombre.value === '') {
       this.nombre.control.setErrors({ required: true });
       return;

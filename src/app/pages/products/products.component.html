@@ -17,7 +17,7 @@
 			<div class="row mt-3 d-flex align-items-stretch">
 				@for (product of products; track $index) {
 				<div class="col-md-6 col-xl-3 mb-3">
-					<app-product [product]="product" />
+					<app-product [product]="product" [onDeleted]="removeProduct.bind(this)" />
 				</div>
 				}
 			</div>
@@ -25,6 +25,4 @@
 	</section>
 </article>
 
-@if (offcanvas) {
 <app-product-editor [events]="offcanvas" />
-}
