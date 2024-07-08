@@ -1,0 +1,35 @@
+<article class="card w-100 h-100">
+	<div class="card-body d-flex flex-column justify-content-between">
+		<section class="card-title">
+			<span class="h5 me-2">
+				{{ user.name }} {{ user.lastname }}
+			</span>
+			<span class="bg-dark text-white float-end rounded px-2">
+				{{ user.id }}
+			</span>
+		</section>
+
+		<p class="card-text">
+			<strong>Email:</strong> {{ user.email }} <br>
+			<strong>Usuario:</strong> {{ user.username }}
+		</p>
+
+		<section class="card-footer d-flex flex-column">
+			<span class="badge mb-2 bg-info">
+				{{ user.role.name }}
+			</span>
+			
+			<span class="badge mb-2" [class.bg-success]="user.credentialsNonExpired" [class.bg-danger]="!user.credentialsNonExpired">
+				{{ user.credentialsNonExpired ? 'Credenciales válidas' : 'Credenciales expiradas' }}
+			</span>
+
+			<span class="badge mb-2" [class.bg-success]="user.accountNonExpired && user.accountNonLocked" [class.bg-danger]="!user.accountNonExpired || !user.accountNonLocked">
+				{{ user.accountNonExpired && user.accountNonLocked ? 'Cuenta activa' : 'Cuenta inactiva' }}
+			</span>
+
+			<span class="badge mb-2" [class.bg-success]="user.enabled" [class.bg-danger]="!user.enabled">
+				{{ user.enabled ? 'Habilitado' : 'Deshabilitado' }}
+			</span>
+		</section>
+	</div>
+</article>

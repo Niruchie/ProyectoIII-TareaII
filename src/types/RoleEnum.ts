@@ -1,6 +1,6 @@
 enum RoleEnum {
-	SUPER_ADMIN_ROLE,
-	USER,
+	SUPER_ADMIN_ROLE = "SUPER_ADMIN_ROLE",
+	USER = "USER",
 }
 
 export { RoleEnum };

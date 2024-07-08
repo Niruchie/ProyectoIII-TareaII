@@ -1,1 +1,24 @@
-<p>users works!</p>
+<article class="container-fluid px-5 py-2">
+	<section name="title" class="py-2">
+		<span class="h1">
+			Usuarios
+		</span>
+	</section>
+
+	<section name="actions" class="d-flex justify-content-end">
+		<button class="btn btn-warning" (click)="reload()">
+			<i class="bi bi-plus-lg"></i>
+			Recargar
+		</button>
+	</section>
+
+	<section name="users">
+		<div class="container-fluid">
+			<div class="row mt-3 d-flex align-items-stretch">
+				<div *ngFor="let user of users; let i = index" class="col-md-6 col-xl-3 mb-3">
+					<app-user [user]="user" />
+				</div>
+			</div>
+		</div>
+	</section>
+</article>
