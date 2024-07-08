@@ -1,14 +1,18 @@
 import { Routes } from '@angular/router';
 
+import { adminGuard } from './guard/admin.guard';
 import { userGuard } from './guard/user.guard';
 import { noneGuard } from './guard/none.guard';
+import { anyGuard } from './guard/any.guard';
 
-import { HomeComponent } from './pages/common/home/home.component';
-import { LoginComponent } from './pages/auth/login/login.component';
-import { RegisterComponent } from './pages/auth/register/register.component';
+import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
 import { DashboardComponent } from './pages/common/dashboard/dashboard.component';
-import { ProductsComponent } from './pages/products/products.component';
 import { CategoriesComponent } from './pages/categories/categories.component';
+import { RegisterComponent } from './pages/auth/register/register.component';
+import { ProductsComponent } from './pages/products/products.component';
+import { LoginComponent } from './pages/auth/login/login.component';
+import { HomeComponent } from './pages/common/home/home.component';
+import { UsersComponent } from './pages/users/users.component';
 
 export const routes: Routes = [
 	{
@@ -40,5 +44,15 @@ export const routes: Routes = [
 		path: 'categories',
 		canActivate: [userGuard],
 		component: CategoriesComponent,
+	},
+	{
+		path: 'users',
+		canActivate: [userGuard, adminGuard],
+		component: UsersComponent,
+	},
+	{
+		path: 'unauthorized',
+		canActivate: [anyGuard],
+		component: UnauthorizedComponent,
 	},
 ];

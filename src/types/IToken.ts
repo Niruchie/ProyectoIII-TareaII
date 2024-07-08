@@ -1,3 +1,5 @@
+import RoleEnum from "./RoleEnum";
+
 interface IToken {
   token: string;
   authUser: IAuthUser;
@@ -27,7 +29,7 @@ interface IAuthority {
 
 interface IRole {
   id: number;
-  name: string;
+  name: RoleEnum;
   description: string;
   createdAt: string;
   updatedAt: string;

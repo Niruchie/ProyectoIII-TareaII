@@ -4,6 +4,7 @@ import { Observable, Subject, tap } from 'rxjs';
 
 import IToken, { IAuthUser } from '../../types/IToken';
 import ICredentials from '../../types/ICredentials';
+import RoleEnum from '../../types/RoleEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +67,14 @@ export class AuthenticationService {
     const value = !!this.token;
     this.authorized.next(value);
     return value;
+  }
+
+  public hasRole(role: RoleEnum): boolean {
+    if (!this.isAuthenticated()) return false;
+    if (!this.authUser) return false;
+
+    this.authorized.next(!!this.token);
+    return this.authUser.role.name == role;
   }
 
   public login(credentials: ICredentials): Observable<IToken> {
