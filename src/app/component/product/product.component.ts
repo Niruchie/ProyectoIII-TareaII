@@ -1,18 +1,20 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
+import { NgIf } from '@angular/common';
 import { Subject } from 'rxjs';
 
+import { AuthenticationService } from '../../service/authentication.service';
 import { CategoryService } from '../../service/category.service';
+import { EditorComponent } from "./editor/editor.component";
 import ICategory from '../../../types/ICategory';
 import IProduct from '../../../types/IProduct';
-import { EditorComponent } from "./editor/editor.component";
+import RoleEnum from '../../../types/RoleEnum';
 
 @Component({
+  imports: [NgIf, EditorComponent],
     templateUrl: './product.component.html',
     styleUrl: './product.component.scss',
     selector: 'app-product',
     standalone: true,
-    imports: [CommonModule, EditorComponent]
 })
 export class ProductComponent {
   @Input({ required: true })
@@ -22,7 +24,8 @@ export class ProductComponent {
   public product!: IProduct;
 
   private catservice = inject(CategoryService);
-
+  protected canModify = inject(AuthenticationService)
+    .hasRole(RoleEnum.SUPER_ADMIN_ROLE);
   protected offcanvas: Subject<{
     product: IProduct;
     categories: Array<ICategory>;

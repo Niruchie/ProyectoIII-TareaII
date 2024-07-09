@@ -10,11 +10,10 @@ import RoleEnum from '../../types/RoleEnum';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  public authorized: Subject<boolean> = new Subject<boolean>();
-
-  authUser: IAuthUser | null = null;
-  token: string | null = null;
-  expiresIn: number = 0;
+  private authorized: Subject<boolean> = new Subject<boolean>();
+  private authUser: IAuthUser | null = null;
+  private token: string | null = null;
+  private expiresIn: number = 0;
 
   constructor(private client: HttpClient) {
     this.load();
@@ -29,7 +28,7 @@ export class AuthenticationService {
     this.expiresIn = 0;
     this.authUser = null;
     
-    this.authorized.next(false);
+    this.authorized.next(this.isAuthenticated());
   }
 
   private save(token: IToken): void {
@@ -48,11 +47,15 @@ export class AuthenticationService {
     if (user) this.authUser = user;
     const expiresIn = localStorage.getItem('expires_in');
     if (expiresIn) this.expiresIn = parseInt(expiresIn);
-    this.isAuthenticated();
+    this.authorized.next(this.isAuthenticated());
   }
 
   get events(): Observable<boolean> {
     return this.authorized.asObservable();
+  }
+
+  public capture() {
+    this.authorized.next(this.isAuthenticated());
   }
 
   public getToken(): string | null {
@@ -65,7 +68,6 @@ export class AuthenticationService {
 
   public isAuthenticated(): boolean {
     const value = !!this.token;
-    this.authorized.next(value);
     return value;
   }
 
@@ -73,7 +75,6 @@ export class AuthenticationService {
     if (!this.isAuthenticated()) return false;
     if (!this.authUser) return false;
 
-    this.authorized.next(!!this.token);
     return this.authUser.role.name == role;
   }
 

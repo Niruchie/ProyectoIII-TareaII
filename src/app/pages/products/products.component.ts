@@ -1,18 +1,21 @@
-import { Component, inject, OnChanges, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Subject } from 'rxjs/internal/Subject';
 
 // * Categories
 import { CategoryService } from '../../service/category.service';
 import ICategory from '../../../types/ICategory';
+import { NgIf } from '@angular/common';
 
 // * Products
 import { EditorComponent } from '../../component/product/editor/editor.component';
+import { AuthenticationService } from '../../service/authentication.service';
 import { ProductComponent } from '../../component/product/product.component';
 import { ProductService } from '../../service/product.service';
 import IProduct from '../../../types/IProduct';
+import RoleEnum from '../../../types/RoleEnum';
 
 @Component({
-  imports: [ProductComponent, EditorComponent],
+  imports: [ProductComponent, EditorComponent, NgIf],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss',
   selector: 'app-products',
@@ -23,6 +26,8 @@ export class ProductsComponent implements OnInit {
   private service = inject(ProductService);
   protected categories: Array<ICategory> = [];
   protected products: Array<IProduct> = [];
+  protected canAggregate = inject(AuthenticationService)
+    .hasRole(RoleEnum.SUPER_ADMIN_ROLE);
   protected offcanvas = new Subject<{
     product: IProduct;
     categories: Array<ICategory>;

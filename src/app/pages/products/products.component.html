@@ -5,7 +5,7 @@
 		</span>
 	</section>
 
-	<section name="actions" class="d-flex justify-content-end">
+	<section *ngIf="canAggregate" name="actions" class="d-flex justify-content-end">
 		<button class="btn btn-info" (click)="clickAddProduct()">
 			<i class="bi bi-plus-lg"></i>
 			Agregar

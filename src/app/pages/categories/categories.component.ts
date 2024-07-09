@@ -1,13 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Subject } from 'rxjs/internal/Subject';
+import { NgIf } from '@angular/common';
 
 import { EditorComponent } from '../../component/category/editor/editor.component';
 import { CategoryComponent } from '../../component/category/category.component';
+import { AuthenticationService } from '../../service/authentication.service';
 import { CategoryService } from '../../service/category.service';
 import ICategory from '../../../types/ICategory';
+import RoleEnum from '../../../types/RoleEnum';
 
 @Component({
-  imports: [CategoryComponent, EditorComponent],
+  imports: [CategoryComponent, EditorComponent, NgIf],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss',
   selector: 'app-categories',
@@ -16,6 +19,8 @@ import ICategory from '../../../types/ICategory';
 export class CategoriesComponent implements OnInit {
   private service: CategoryService = inject(CategoryService);
   protected categories: Array<ICategory> = [];
+  protected canAggregate = inject(AuthenticationService)
+    .hasRole(RoleEnum.SUPER_ADMIN_ROLE);
   protected offcanvas = new Subject<{
     category: ICategory;
     onCreated: (category: ICategory) => undefined;

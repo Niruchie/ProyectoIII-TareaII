@@ -4,7 +4,7 @@
 			<span class="h5 me-2">
 				{{category.nombre}}
 			</span>
-			<span class="bg-dark text-white float-end rounded px-2">
+			<span *ngIf="canModify" class="bg-dark text-white float-end rounded px-2">
 				{{category.id}}
 			</span>
 		</div>
@@ -13,7 +13,7 @@
 			{{category.descripcion}}
 		</p>
 
-		<div class="card-footer  d-flex justify-content-end">
+		<div *ngIf="canModify" class="card-footer  d-flex justify-content-end">
 			<button class="btn btn-primary ms-2" (click)="clickUpdateCategory()">
 				<i class="bi bi-pencil"></i>
 				Modificar elemento

@@ -57,11 +57,13 @@ export class EditorComponent implements OnInit {
   protected async save() {
     if (!this.nombre.valid || this.nombre.value === '') {
       this.nombre.control.setErrors({ required: true });
+      this.nombre.control.markAsTouched();
       return;
     }
 
     if (!this.descripcion.valid || this.descripcion.value === '') {
       this.descripcion.control.setErrors({ required: true });
+      this.descripcion.control.markAsTouched();
       return;
     }
 

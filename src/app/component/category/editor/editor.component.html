@@ -16,7 +16,7 @@
 					<label for="nombre" class="form-label">Nombre</label>
 					<input ngModel #nombre="ngModel" name="nombre" type="text" class="form-control" id="nombre"
 						aria-describedby="nombreHelp" required>
-					<span *ngIf="!nombre.hasError('required') || !nombre.touched" id="nombreHelp" class="form-text">
+					<span *ngIf="!nombre.hasError('required') || !nombre.touched" maxlength="90" id="nombreHelp" class="form-text">
 						Nombre de la categoría.
 					</span>
 					<span *ngIf="nombre.hasError('required') && nombre.touched" id="nombreHelp"
@@ -29,7 +29,7 @@
 					<label for="descripcion" class="form-label">Descripción</label>
 					<textarea ngModel #descripcion="ngModel" name="descripcion" class="form-control" id="descripcion"
 						aria-describedby="descripcionHelp" required></textarea>
-					<span *ngIf="!descripcion.hasError('required') || !descripcion.touched" id="descripcionHelp"
+					<span *ngIf="!descripcion.hasError('required') || !descripcion.touched" maxlength="190" id="descripcionHelp"
 						class="form-text">
 						Descripción de la categoría.
 					</span>

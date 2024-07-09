@@ -5,7 +5,7 @@
 				{{product.nombre}}
 			</span>
 
-			<span class="bg-dark text-white float-end rounded ms-2 px-2">
+			<span *ngIf="canModify" class="bg-dark text-white float-end rounded ms-2 px-2">
 				{{product.id}}
 			</span>
 
@@ -38,7 +38,7 @@
 		</section>
 
 
-		<div class="card-footer d-flex justify-content-end">
+		<div *ngIf="canModify" class="card-footer d-flex justify-content-end">
 			<button class="btn btn-primary ms-2" (click)="clickUpdateProduct()">
 				<i class="bi bi-pencil"></i>
 				Modificar elemento

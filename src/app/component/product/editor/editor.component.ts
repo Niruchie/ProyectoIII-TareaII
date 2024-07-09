@@ -80,26 +80,31 @@ export class EditorComponent {
 
     if (!this.nombre.valid || this.nombre.value === '') {
       this.nombre.control.setErrors({ required: true });
+      this.nombre.control.markAsTouched();
       return;
     }
 
     if (!this.descripcion.valid || this.descripcion.value === '') {
       this.descripcion.control.setErrors({ required: true });
+      this.descripcion.control.markAsTouched();
       return;
     }
 
     if (!this.precio.valid || isNaN(precio) || precio < 0) {
       this.precio.control.setErrors({ required: true });
+      this.precio.control.markAsTouched();
       return;
     }
 
     if (!this.cantidadEnStock.valid || isNaN(cantidadEnStock) || cantidadEnStock < 0) {
       this.cantidadEnStock.control.setErrors({ required: true });
+      this.cantidadEnStock.control.markAsTouched();
       return;
     }
 
     if (isNaN(categoriaId) || !this.categories.map((category) => category.id).includes(categoriaId)) {
       this.categoria.control.setErrors({ required: true });
+      this.categoria.control.markAsTouched();
       return;
     }
 
@@ -112,6 +117,7 @@ export class EditorComponent {
 
     if (!this.product.categoria) {
       this.categoria.control.setErrors({ required: true });
+      this.categoria.control.markAsTouched();
       return;
     }
 
