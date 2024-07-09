@@ -1,1 +1,38 @@
-<span class="h1 m-5">Dashboard component is active.</span>
+<article class="container mt-5">
+	<div class="row"></div>
+	<section class="row d-flex justify-content-start">
+		<form *ngIf="canAccess" class="col-12 mb-4">
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">Usuarios</h5>
+					<p class="card-text">Administra todos los usuarios registrados.</p>
+					<div class="d-flex flex-row-reverse">
+						<a class="btn btn-primary" [routerLink]="'/users'">Ver Usuarios</a>
+					</div>
+				</div>
+			</div>
+		</form>
+		<form class="col-12 mb-4">
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">Categorías</h5>
+					<p class="card-text">Gestiona las categorías disponibles.</p>
+					<div class="d-flex flex-row-reverse">
+						<a class="btn btn-primary" [routerLink]="'/categories'">Ver Categorías</a>
+					</div>
+				</div>
+			</div>
+		</form>
+		<form class="col-12 mb-4">
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">Productos</h5>
+					<p class="card-text">Explora y edita los productos.</p>
+					<div class="d-flex flex-row-reverse">
+						<a class="btn btn-primary" [routerLink]="'/products'">Ver Productos</a>
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
+</article>
