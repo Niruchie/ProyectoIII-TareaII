@@ -10,6 +10,7 @@ import { NgIf } from '@angular/common';
 import { EditorComponent } from '../../component/product/editor/editor.component';
 import { AuthenticationService } from '../../service/authentication.service';
 import { ProductComponent } from '../../component/product/product.component';
+import { ReportingService } from '../../service/reporting.service';
 import { ProductService } from '../../service/product.service';
 import IProduct from '../../../types/IProduct';
 import RoleEnum from '../../../types/RoleEnum';
@@ -23,6 +24,7 @@ import RoleEnum from '../../../types/RoleEnum';
 })
 export class ProductsComponent implements OnInit {
   private catservice = inject(CategoryService);
+  private reporter = inject(ReportingService);
   private service = inject(ProductService);
   protected categories: Array<ICategory> = [];
   protected products: Array<IProduct> = [];
@@ -65,6 +67,31 @@ export class ProductsComponent implements OnInit {
     const product = {} as IProduct;
     this.service
       .obtain(product)
-      .subscribe((data) => this.products = data);
+      .subscribe({
+        next: (products) => {
+          this.products = products;
+          this.reporter
+            .info("Productos cargados correctamente.");
+        },
+        error: (error) => this.reporter.error("Error al cargar los productos."),
+      });
+
+    const category = {} as ICategory;
+    this.catservice
+      .obtain(category)
+      .subscribe({
+        next: (categories) => {
+          this.categories = categories;
+          console.log(this.canAggregate, this.categories.length);
+          if (this.canAggregate && this.categories.length <= 0) {
+            this.reporter
+              .warn("Sin categorías, por favor, cree una.");
+            this.reporter
+              .warn("Agregar producto deshabilitado.");
+            
+          }
+        },
+        error: (error) => this.reporter.error("Error al cargar las categorías."),
+      });
   }
 }

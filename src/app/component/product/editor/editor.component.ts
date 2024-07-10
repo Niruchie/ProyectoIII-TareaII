@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { ProductService } from '../../../service/product.service';
 import ICategory from '../../../../types/ICategory';
 import IProduct from '../../../../types/IProduct';
+import { ReportingService } from '../../../service/reporting.service';
 
 @Component({
   imports: [EditorComponent, CommonModule, FormsModule],
@@ -40,6 +41,7 @@ export class EditorComponent {
 
 
   private service = inject(ProductService);
+  private reporter = inject(ReportingService);
   protected addCreatedProduct = (product: IProduct) => void 0;
   protected addDeletedProduct = (product: IProduct) => void 0;
   protected categories: Array<ICategory> = [];
@@ -128,8 +130,10 @@ export class EditorComponent {
           next: () => {
             this.closeEditor();
             this.cleanEditor();
+            this.reporter
+              .success("El producto ha sido actualizado con éxito.");
           },
-          error: (error) => console.error(error),
+          error: (error) => this.reporter.error("Ha ocurrido un error al actualizar el producto."),
         });
     }
     else {
@@ -140,8 +144,10 @@ export class EditorComponent {
             this.addCreatedProduct(product);
             this.closeEditor();
             this.cleanEditor();
+            this.reporter
+              .success("El producto ha sido creado con éxito.");
           },
-          error: (error) => console.error(error),
+          error: (error) => this.reporter.error("Ha ocurrido un error al crear el producto."),
         });
     }
   }
@@ -158,8 +164,10 @@ export class EditorComponent {
           this.addDeletedProduct(this.product);
           this.closeEditor();
           this.cleanEditor();
+          this.reporter
+            .success("El producto ha sido eliminado con éxito.");
         },
-        error: (error) => console.error(error),
+        error: (error) => this.reporter.error("Ha ocurrido un error al eliminar el producto."),
       });
   }
 

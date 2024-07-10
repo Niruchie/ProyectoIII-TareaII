@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../../../service/authentication.service';
+import { ReportingService } from '../../../service/reporting.service';
 
 @Component({
   imports: [LoginComponent, CommonModule, FormsModule],
@@ -12,7 +13,9 @@ import { AuthenticationService } from '../../../service/authentication.service';
   standalone: true,
 })
 export class LoginComponent {
-  constructor(private service: AuthenticationService, private router: Router) {}
+  private service = inject(AuthenticationService);
+  private reporter = inject(ReportingService);
+  private router = inject(Router);
 
   @ViewChild("email")
   private email!: NgModel;
@@ -40,7 +43,7 @@ export class LoginComponent {
       })
       .subscribe({
         next: () => this.router.navigate(["/dashboard"]),
-        error: (err) => console.error(err),
+        error: (err) => this.reporter.error("Ha ocurrido un error. Verifica tus credenciales."),
       });
   }
 }

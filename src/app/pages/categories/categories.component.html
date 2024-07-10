@@ -25,4 +25,27 @@
 	</section>
 </article>
 
+@defer (on timer(1000ms)) {
+<article class="container mt-3" *ngIf="categories.length <= 0">
+	<div class="alert alert-warning fade show" role="alert">
+		<h4 class="alert-heading">No hay categorías</h4>
+
+		<p>
+			No hay categorías registradas en el sistema.
+		</p>
+
+		<hr />
+
+		<p class="mb-0" *ngIf="canAggregate">
+			Para agregar una categoría, haga clic en el botón "Agregar" en la esquina superior derecha.
+		</p>
+
+		<p class="mb-0" *ngIf="!canAggregate">
+			Para agregar una categoría, contacte al administrador del sistema.
+		</p>
+
+	</div>
+</article>
+}
+
 <app-category-editor [events]="offcanvas" />

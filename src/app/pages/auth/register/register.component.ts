@@ -4,6 +4,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 
 import { AuthenticationService } from '../../../service/authentication.service';
+import { ReportingService } from '../../../service/reporting.service';
 
 @Component({
   templateUrl: './register.component.html',
@@ -14,6 +15,7 @@ import { AuthenticationService } from '../../../service/authentication.service';
 })
 export class RegisterComponent {
   private service = inject(AuthenticationService);
+  private reporting = inject(ReportingService);
   private router = inject(Router);
 
   onRegister(form: NgForm) {
@@ -22,8 +24,18 @@ export class RegisterComponent {
       this.service
         .create(user)
         .subscribe({
-          next: () => this.router.navigate(['/login']),
-          error: (error) => console.error(error),
+          next: () => {
+            this.router
+              .navigate(['/login'])
+              .then(() => {
+                this.reporting
+                  .info("Usuario creado correctamente.");
+              });
+          },
+          error: (error) => {
+            this.reporting
+              .error("Error al crear el usuario.");
+          },
         });
     }
   }

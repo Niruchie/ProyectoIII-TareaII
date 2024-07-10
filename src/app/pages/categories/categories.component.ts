@@ -5,6 +5,7 @@ import { NgIf } from '@angular/common';
 import { EditorComponent } from '../../component/category/editor/editor.component';
 import { CategoryComponent } from '../../component/category/category.component';
 import { AuthenticationService } from '../../service/authentication.service';
+import { ReportingService } from '../../service/reporting.service';
 import { CategoryService } from '../../service/category.service';
 import ICategory from '../../../types/ICategory';
 import RoleEnum from '../../../types/RoleEnum';
@@ -18,6 +19,7 @@ import RoleEnum from '../../../types/RoleEnum';
 })
 export class CategoriesComponent implements OnInit {
   private service: CategoryService = inject(CategoryService);
+  private reporter = inject(ReportingService);
   protected categories: Array<ICategory> = [];
   protected canAggregate = inject(AuthenticationService)
     .hasRole(RoleEnum.SUPER_ADMIN_ROLE);
@@ -50,6 +52,13 @@ export class CategoriesComponent implements OnInit {
     const category = {} as ICategory;
     this.service
       .obtain(category)
-      .subscribe((data) => this.categories = data);
+      .subscribe({
+        next: (categories) => {
+          this.categories = categories;
+          this.reporter
+            .info("Categorías cargadas correctamente.");
+        },
+        error: (error) => this.reporter.error("Error al cargar las categorías."),
+      });
   }
 }

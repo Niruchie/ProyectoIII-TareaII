@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { CategoryService } from '../../../service/category.service';
 import ICategory from '../../../../types/ICategory';
 import { Observable } from 'rxjs';
+import { ReportingService } from '../../../service/reporting.service';
 
 @Component({
   imports: [EditorComponent, CommonModule, FormsModule],
@@ -28,6 +29,8 @@ export class EditorComponent implements OnInit {
   }>;
 
   private service: CategoryService = inject(CategoryService);
+  private reporter = inject(ReportingService);
+
   protected addCreatedCategory = (category: ICategory) => void 0;
   protected addDeletedCategory = (category: ICategory) => void 0;
   protected category: ICategory = {} as ICategory;
@@ -77,8 +80,10 @@ export class EditorComponent implements OnInit {
           next: () => {
             this.closeEditor();
             this.cleanEditor();
+            this.reporter
+              .success("Categoría actualizada correctamente.");
           },
-          error: (error) => console.error(error),
+          error: (error) => this.reporter.error("Ha ocurrido un error al actualizar la categoría."),
         });
     }
     else {
@@ -89,8 +94,10 @@ export class EditorComponent implements OnInit {
             this.addCreatedCategory(category);
             this.closeEditor();
             this.cleanEditor();
+            this.reporter
+              .success("Categoría creada correctamente.");
           },
-          error: (error) => console.error(error),
+          error: (error) => this.reporter.error("Ha ocurrido un error al crear la categoría."),
         });
     }
   }
@@ -107,8 +114,10 @@ export class EditorComponent implements OnInit {
           this.addDeletedCategory(this.category);
           this.closeEditor();
           this.cleanEditor();
+          this.reporter
+            .success("Categoría eliminada correctamente.");
         },
-        error: (error) => console.error(error),
+        error: (error) => this.reporter.error("Ha ocurrido un error al eliminar la categoría."),
       });
   }
 

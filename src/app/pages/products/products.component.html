@@ -5,7 +5,7 @@
 		</span>
 	</section>
 
-	<section *ngIf="canAggregate" name="actions" class="d-flex justify-content-end">
+	<section *ngIf="canAggregate && 0 < categories.length" name="actions" class="d-flex justify-content-end">
 		<button class="btn btn-info" (click)="clickAddProduct()">
 			<i class="bi bi-plus-lg"></i>
 			Agregar
@@ -24,5 +24,33 @@
 		</div>
 	</section>
 </article>
+
+
+@defer (on timer(1000ms)) {
+<article class="container mt-3" *ngIf="products.length <= 0">
+	<div class="alert alert-warning fade show" role="alert">
+		<h4 class="alert-heading">No hay productos</h4>
+
+		<p>
+			No hay productos registrados en el sistema.
+		</p>
+
+		<hr />
+
+		<p class="mb-0" *ngIf="canAggregate">
+			Para agregar un producto, haga clic en el botón "Agregar" en la esquina superior derecha.
+		</p>
+
+		<p class="mb-0" *ngIf="!canAggregate">
+			Para agregar un producto, contacte al administrador del sistema.
+		</p>
+
+	</div>
+</article>
+} 
+
+
+
+
 
 <app-product-editor [events]="offcanvas" />
