@@ -1,21 +1,25 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, Subject, tap } from 'rxjs';
 
 import IToken, { IAuthUser } from '../../types/IToken';
+import { CrudBaseService } from './crud.base.service';
 import ICredentials from '../../types/ICredentials';
 import RoleEnum from '../../types/RoleEnum';
+import IUser from '../../types/IUser';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService {
+export class AuthenticationService extends CrudBaseService<IUser> {
   private authorized: Subject<boolean> = new Subject<boolean>();
   private authUser: IAuthUser | null = null;
   private token: string | null = null;
   private expiresIn: number = 0;
-
-  constructor(private client: HttpClient) {
+  
+  protected override service = '/auth/signup';
+  constructor(private http: HttpClient) {
+    super(http);
     this.load();
   }
 
@@ -36,7 +40,7 @@ export class AuthenticationService {
 
     if (token.token) localStorage.setItem('token', token.token);
     if (token.authUser) localStorage.setItem('auth_user', JSON.stringify(token.authUser));
-    if (token.expiresIn) localStorage.setItem('expires_in', token.expiresIn.toString());
+    if (token.expiresIn) localStorage.setItem('expires_in', (Date.now() + token.expiresIn).toString());
 
     this.load();
   }
@@ -71,6 +75,10 @@ export class AuthenticationService {
     return value;
   }
 
+  public isExpiredSession() {
+    return this.expiresIn > Date.now();
+  }
+
   public hasRole(role: RoleEnum): boolean {
     if (!this.isAuthenticated()) return false;
     if (!this.authUser) return false;
@@ -79,7 +87,7 @@ export class AuthenticationService {
   }
 
   public login(credentials: ICredentials): Observable<IToken> {
-    return this.client
+    return this.http
       .post<IToken>('/auth/login', credentials)
       .pipe(tap((token: IToken) => this.save(token)));
   }

@@ -1,1 +1,59 @@
-<span class="h1 m-5">Register component is active.</span>
+<section name="register" class="container p-5">
+
+	<form #formRegister="ngForm" (ngSubmit)="onRegister(formRegister)">
+
+		<div class="form-group mb-2">
+			<label for="email" class="py-2">Correo electrónico</label>
+			<input ngModel #email="ngModel" name="email" type="email" class="form-control"
+				placeholder="Ingrese su correo electrónico" aria-describedby="emailHelp" required email>
+			<small class="form-text text-muted">
+				Su correo electrónico se utilizará para iniciar sesión.
+			</small>
+			<small *ngIf="email.invalid && email.touched" class="text-danger">
+				Por favor, ingrese un correo electrónico válido.
+			</small>
+		</div>
+
+		<div class="form-group mb-2">
+			<label for="lastname" class="py-2">Apellido</label>
+			<input ngModel #lastname="ngModel" name="lastname" type="text" class="form-control"
+				placeholder="Ingrese su apellido" aria-describedby="lastnameHelp" required minlength="2">
+			<small class="form-text text-muted">
+				Su apellido será visible en su perfil.
+			</small>
+			<small *ngIf="lastname.invalid && lastname.touched" class="text-danger">
+				El apellido es obligatorio y debe tener al menos 2 caracteres.
+			</small>
+		</div>
+
+		<div class="form-group mb-2">
+			<label for="name" class="py-2">Nombre</label>
+			<input ngModel #name="ngModel" name="name" type="text" class="form-control" placeholder="Ingrese su nombre"
+				aria-describedby="nameHelp" required minlength="2">
+			<small class="form-text text-muted">
+				Su nombre será visible en su perfil.
+			</small>
+			<small *ngIf="name.invalid && name.touched" class="text-danger">
+				El nombre es obligatorio y debe tener al menos 2 caracteres.
+			</small>
+		</div>
+
+		<div class="form-group mb-2">
+			<label for="password" class="py-2">Contraseña</label>
+			<input ngModel #password="ngModel" name="password" type="password" class="form-control"
+				placeholder="Ingrese su contraseña" aria-describedby="passwordHelp" required minlength="6">
+			<small class="form-text text-muted">
+				No comparta su contraseña con nadie más.
+			</small>
+			<small *ngIf="password.invalid && password.touched" class="text-danger">
+				La contraseña es obligatoria y debe tener al menos 6 caracteres.
+			</small>
+		</div>
+
+		<div class="mb-2">
+			<button type="submit" class="btn btn-primary" [disabled]="formRegister.invalid">Registrarse</button>
+		</div>
+
+	</form>
+
+</section>
